@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Resistance Checker</title>
+	<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+	<header class="container">
+		<h1>Resistance Checker</h1>
+		<p class="subtitle">Upload or capture a resistor, detect bands, and compute resistance.</p>
+		<div style="margin-top:12px">
+			<button id="themeToggle" class="button secondary">Toggle Theme</button>
+		</div>
+	</header>
+
+	<main class="container card">
+		<section class="controls" style="justify-content:space-between">
+			<div style="display:flex; gap:8px">
+				<button id="imageModeBtn" class="button primary">Image Mode</button>
+				<button id="manualModeBtn" class="button secondary">Manual Mode</button>
+			</div>
+		</section>
+
+		<div id="imageMode">
+			<section class="controls">
+				<div class="upload">
+					<label class="button" for="fileInput">Select Image</label>
+					<input id="fileInput" type="file" accept="image/*" capture="environment" hidden />
+					<button id="cameraBtn" class="button secondary">Use Camera</button>
+				</div>
+			</section>
+
+			<section class="preview">
+				<canvas id="preview" width="640" height="480"></canvas>
+				<video id="video" autoplay playsinline class="hidden"></video>
+			</section>
+
+			<section class="actions">
+				<button id="analyzeBtn" class="button primary" disabled>Analyze</button>
+			</section>
+		</div>
+
+		<div id="manualMode" class="hidden">
+			<section class="manual card" style="margin-top:0">
+				<h3 style="margin-top:0">Resistor color code calculator</h3>
+				<div class="manual-grid">
+					<div class="manual-row">
+						<label class="manual-label">Number of Bands:</label>
+						<select id="bandsSel" class="manual-select">
+							<option value="3">3 Band</option>
+							<option value="4" selected>4 Band</option>
+							<option value="5">5 Band</option>
+							<option value="6">6 Band</option>
+						</select>
+					</div>
+
+					<div class="manual-row" id="row-d1">
+						<label class="manual-label">1st Band Color:</label>
+						<div class="chip-group" id="chips-d1"></div>
+					</div>
+					<div class="manual-row" id="row-d2">
+						<label class="manual-label">2nd Band Color:</label>
+						<div class="chip-group" id="chips-d2"></div>
+					</div>
+					<div class="manual-row" id="row-d3">
+						<label class="manual-label">3rd Band Color:</label>
+						<div class="chip-group" id="chips-d3"></div>
+					</div>
+					<div class="manual-row">
+						<label class="manual-label">Multiplier Color:</label>
+						<div class="chip-group" id="chips-mul"></div>
+					</div>
+					<div class="manual-row" id="row-tol">
+						<label class="manual-label">Tolerance Color:</label>
+						<div class="chip-group" id="chips-tol"></div>
+					</div>
+					<div class="manual-row" id="row-temp">
+						<label class="manual-label">Temperature Coefficient:</label>
+						<div class="chip-group" id="chips-temp"></div>
+					</div>
+					<div class="manual-actions">
+						<button id="manualCalc" class="button primary">Calculate</button>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<section id="result" class="result hidden"></section>
+	</main>
+
+	<footer class="container muted">
+		<p>Tip: Ensure good lighting and the resistor is in focus.</p>
+	</footer>
+
+	<script src="/static/app.js"></script>
+</body>
+</html>

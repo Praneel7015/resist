@@ -1,0 +1,116 @@
+:root{
+	--bg:#0f1222;
+	--panel:#14172b;
+	--text:#e7e9f7;
+	--muted:#a3a8c3;
+	--accent:#6c7cff;
+	--accent-2:#54e1b7;
+	--danger:#ff6b6b;
+	--border: #232742;
+}
+:root.light{
+	--bg:#f7f8fd;
+	--panel:#ffffff;
+	--text:#0f1222;
+	--muted:#4b516e;
+	--accent:#4f5dff;
+	--accent-2:#16a085;
+	--danger:#e74c3c;
+	--border:#e6e8f2;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+	margin:0;
+	background:radial-gradient(1000px 600px at 10% -10%, #1a1f3b 0%, transparent 60%),
+		linear-gradient(180deg, #0e1020 0%, #0b0d17 100%);
+	color:var(--text);
+	font:400 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+	background-color:var(--bg);
+}
+:root.light body{
+	background:linear-gradient(180deg, #f9faff 0%, #f2f4fb 100%);
+}
+.container{width:min(1000px, 92%); margin:32px auto}
+header.container{margin-top:48px; text-align:center}
+.subtitle{color:var(--muted); margin-top:8px}
+
+.card{
+	background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+	border:1px solid var(--border);
+	border-radius:16px;
+	padding:24px;
+	box-shadow:0 20px 50px rgba(0,0,0,0.08);
+	background-color:var(--panel);
+}
+.controls{display:flex; justify-content:center; margin-bottom:16px}
+.button{ 
+	appearance:none; border:none; border-radius:12px; padding:12px 16px; cursor:pointer;
+	background:var(--accent); color:white; font-weight:600; letter-spacing:.2px; transition:.2s transform, .2s box-shadow, .2s opacity, .2s background, .2s color
+}
+.button:hover{box-shadow:0 6px 16px rgba(0,0,0,0.25)}
+.button.secondary{background:transparent; color:var(--text); border:1px solid var(--border)}
+.button.secondary:hover{background:rgba(255,255,255,0.06)}
+.button.primary[disabled]{opacity:.5; cursor:not-allowed}
+.button.is-active{background:var(--accent-2); color:#fff}
+.button.secondary.is-active{background:var(--accent); color:#fff; border-color:transparent}
+.button:active{transform:translateY(1px)}
+.upload{display:flex; gap:12px}
+
+/* Preview layout fix */
+.preview{position:relative; display:grid; place-items:center; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px}
+.preview canvas, .preview video{max-width:100%; border-radius:8px; background:#000}
+.preview video{width:100%; height:auto}
+
+.hidden{display:none}
+
+.actions{display:flex; justify-content:center; margin:16px 0}
+
+.result{margin-top:12px; padding:16px; border:1px solid var(--border); border-radius:12px; background:rgba(108,124,255,0.06)}
+.result strong{color:var(--accent-2)}
+.muted{color:var(--muted)}
+
+.badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:#12162a}
+:root.light .badge{background:#f0f2ff}
+.badge .dot{width:10px; height:10px; border-radius:50%}
+
+.manual-grid{display:grid; gap:12px}
+.manual-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.manual-label{min-width:190px; color:var(--text); font-weight:600}
+.manual-select{padding:8px 10px; border-radius:8px; border:1px solid var(--border); background:transparent; color:var(--text)}
+
+.chip-group{display:flex; gap:10px; flex-wrap:wrap}
+.chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; cursor:pointer; user-select:none; background:rgba(255,255,255,0.02); transition:.2s box-shadow, .2s background}
+.chip:hover{box-shadow:0 4px 12px rgba(0,0,0,0.25)}
+.chip input{appearance:none; width:14px; height:14px; border:2px solid var(--border); border-radius:50%}
+.chip input:checked + .swatch + span, .chip input:checked{filter:none}
+.chip .swatch{width:18px; height:12px; border-radius:4px; border:1px solid rgba(0,0,0,0.25)}
+
+/* swatch colors */
+.swatch-black{background:#000}
+.swatch-brown{background:#7B3F00}
+.swatch-red{background:#D32F2F}
+.swatch-orange{background:#F57C00}
+.swatch-yellow{background:#FFEB3B}
+.swatch-green{background:#2E7D32}
+.swatch-blue{background:#1565C0}
+.swatch-violet{background:#7B1FA2}
+.swatch-grey{background:#9E9E9E}
+.swatch-white{background:#FFFFFF}
+.swatch-gold{background:#D4AF37}
+.swatch-silver{background:#C0C0C0}
+
+.manual-actions{margin-top:8px}
+
+/* Responsive */
+@media (max-width: 640px){
+	.container{width:94%; margin:20px auto}
+	.card{padding:16px}
+	.button{padding:10px 14px}
+	.upload{flex-wrap:wrap}
+	.preview{padding:12px}
+}
+
+@media (min-width: 1200px){
+	.container{width:min(1100px, 92%)}
+}
