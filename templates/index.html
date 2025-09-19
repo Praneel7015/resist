@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Resistance Checker</title>
+	<title>Resist</title>
 	<link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
@@ -11,24 +11,24 @@
 		<h1>Resistance Checker</h1>
 		<p class="subtitle">Upload or capture a resistor, detect bands, and compute resistance.</p>
 		<div style="margin-top:12px">
-			<button id="themeToggle" class="button secondary">Toggle Theme</button>
+			<button id="themeToggle" class="button secondary" type="button">Toggle Theme</button>
 		</div>
 	</header>
 
 	<main class="container card">
 		<section class="controls" style="justify-content:space-between">
 			<div style="display:flex; gap:8px">
-				<button id="imageModeBtn" class="button primary">Image Mode</button>
-				<button id="manualModeBtn" class="button secondary">Manual Mode</button>
+				<button id="imageModeBtn" class="button primary" type="button">Image Mode</button>
+				<button id="manualModeBtn" class="button secondary" type="button">Manual Mode</button>
 			</div>
 		</section>
 
 		<div id="imageMode">
 			<section class="controls">
 				<div class="upload">
-					<label class="button" for="fileInput">Select Image</label>
+					<button id="selectBtn" class="button secondary" type="button">Select Image</button>
 					<input id="fileInput" type="file" accept="image/*" capture="environment" hidden />
-					<button id="cameraBtn" class="button secondary">Use Camera</button>
+					<button id="cameraBtn" class="button primary" type="button">Use Camera</button>
 				</div>
 			</section>
 
@@ -38,7 +38,7 @@
 			</section>
 
 			<section class="actions">
-				<button id="analyzeBtn" class="button primary" disabled>Analyze</button>
+				<button id="analyzeBtn" class="button secondary" type="button" disabled>Analyze</button>
 			</section>
 		</div>
 
@@ -81,7 +81,7 @@
 						<div class="chip-group" id="chips-temp"></div>
 					</div>
 					<div class="manual-actions">
-						<button id="manualCalc" class="button primary">Calculate</button>
+						<button id="manualCalc" class="button primary" type="button">Calculate</button>
 					</div>
 				</div>
 			</section>

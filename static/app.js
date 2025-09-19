@@ -1,4 +1,5 @@
 const fileInput = document.getElementById('fileInput');
+const selectBtn = document.getElementById('selectBtn');
 const cameraBtn = document.getElementById('cameraBtn');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const preview = document.getElementById('preview');
@@ -10,18 +11,18 @@ let stream = null;
 let currentBlob = null;
 let lastDrawnImage = null;
 
-// Theme
+// Theme using html[data-theme]
 (function initTheme(){
-	const root = document.documentElement;
+	const html = document.documentElement;
 	const saved = localStorage.getItem('theme') || 'dark';
-	if(saved === 'light') root.classList.add('light');
-	else root.classList.remove('light');
+	html.dataset.theme = saved;
 })();
 
 themeToggle?.addEventListener('click', () => {
-	const root = document.documentElement;
-	const isLight = root.classList.toggle('light');
-	localStorage.setItem('theme', isLight ? 'light' : 'dark');
+	const html = document.documentElement;
+	const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+	html.dataset.theme = next;
+	localStorage.setItem('theme', next);
 });
 
 function setResult(textHtml){
@@ -47,7 +48,8 @@ function drawToCanvas(img){
 	preview.style.height = cssH + 'px';
 	preview.width = Math.round(cssW * dpr);
 	preview.height = Math.round(cssH * dpr);
-	ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+	const ctxScale = 1;
+	preview.getContext('2d').setTransform(ctxScale, 0, 0, ctxScale, 0, 0);
 	ctx.clearRect(0,0,cssW,cssH);
 	ctx.drawImage(img, 0, 0, cssW, cssH);
 }
@@ -73,10 +75,50 @@ fileInput.addEventListener('change', async (e) => {
 	enableAnalyze(true);
 });
 
+// Select Image opens file picker and stops camera if active
+selectBtn?.addEventListener('click', () => {
+	if(stream){
+		stopCamera();
+		showCanvas();
+	}
+	fileInput.click();
+});
+
+// Mode toggle
+const imageModeBtn = document.getElementById('imageModeBtn');
+const manualModeBtn = document.getElementById('manualModeBtn');
+const imageMode = document.getElementById('imageMode');
+const manualMode = document.getElementById('manualMode');
+
+function stopCamera(){
+	if(stream){
+		video.classList.add('hidden');
+		video.pause();
+		stream.getTracks().forEach(t => t.stop());
+		stream = null;
+		cameraBtn.textContent = 'Use Camera';
+	}
+}
+
 function setActiveModeButton(mode){
 	imageModeBtn?.classList.toggle('is-active', mode==='image');
 	manualModeBtn?.classList.toggle('is-active', mode==='manual');
+	// Swap primary/secondary visuals for clarity
+	if(mode==='image'){
+		imageModeBtn?.classList.add('primary');
+		imageModeBtn?.classList.remove('secondary');
+		manualModeBtn?.classList.add('secondary');
+		manualModeBtn?.classList.remove('primary');
+	}else{
+		manualModeBtn?.classList.add('primary');
+		manualModeBtn?.classList.remove('secondary');
+		imageModeBtn?.classList.add('secondary');
+		imageModeBtn?.classList.remove('primary');
+	}
 }
+
+// Initialize default mode active state
+setActiveModeButton('image');
 
 imageModeBtn?.addEventListener('click', () => {
 	manualMode.classList.add('hidden');
@@ -331,19 +373,3 @@ const tempcoMap = [
 	document.getElementById('bandsSel').addEventListener('change', updateVisibilityByBands);
 	document.getElementById('manualCalc').addEventListener('click', calculateFromChips);
 })();
-
-// Mode toggle
-const imageModeBtn = document.getElementById('imageModeBtn');
-const manualModeBtn = document.getElementById('manualModeBtn');
-const imageMode = document.getElementById('imageMode');
-const manualMode = document.getElementById('manualMode');
-
-function stopCamera(){
-	if(stream){
-		video.classList.add('hidden');
-		video.pause();
-		stream.getTracks().forEach(t => t.stop());
-		stream = null;
-		cameraBtn.textContent = 'Use Camera';
-	}
-}

@@ -1,47 +1,81 @@
+/* Font stack */
+html, body {
+	font-family:
+		-apple-system,
+		BlinkMacSystemFont,
+		Segoe UI,
+		Roboto,
+		Oxygen,
+		Ubuntu,
+		Cantarell,
+		Fira Sans,
+		Droid Sans,
+		Helvetica Neue,
+		sans-serif;
+}
+
+/* Light theme */
 :root{
-	--bg:#0f1222;
-	--panel:#14172b;
-	--text:#e7e9f7;
-	--muted:#a3a8c3;
-	--accent:#6c7cff;
-	--accent-2:#54e1b7;
-	--danger:#ff6b6b;
-	--border: #232742;
+	--bg:#ffffff;
+	--text:#111827;        /* gray-900 */
+	--muted-text:#6b7280;  /* gray-500 */
+	--border:#e5e7eb;      /* gray-200 */
+	--link:#0070f3;
+	--hover-bg:rgba(0,0,0,0.04);
+	/* Status */
+	--success-text:#065f46;       /* emerald-900 */
+	--success-bg:rgba(16,185,129,0.12);
+	--error-text:#7f1d1d;         /* red-900 */
+	--error-bg:rgba(239,68,68,0.12);
+	/* Component tokens mapped from scheme */
+	--panel:var(--bg);
+	--accent:var(--link);
+	--accent-2:var(--success-text);
+	--danger:var(--error-text);
 }
-:root.light{
-	--bg:#f7f8fd;
-	--panel:#ffffff;
-	--text:#0f1222;
-	--muted:#4b516e;
-	--accent:#4f5dff;
-	--accent-2:#16a085;
-	--danger:#e74c3c;
-	--border:#e6e8f2;
+
+/* Dark theme */
+html[data-theme='dark']{
+	--bg:#151617;          /* gray-800 */
+	--text:#e5e7eb;        /* gray-200 */
+	--muted-text:#9ca3af;  /* gray-400 */
+	--border:#363b43;      /* gray-700 */
+	--link:var(--text);    /* neutral link in dark */
+	--hover-bg:rgba(255,255,255,0.06);
+	/* Status */
+	--success-text:#34d399;       /* emerald-400 */
+	--success-bg:rgba(16,185,129,0.22);
+	--error-text:#f87171;         /* red-400 */
+	--error-bg:rgba(239,68,68,0.22);
+	/* Component tokens mapped from scheme */
+	--panel:var(--bg);
+	--accent:#3b82f6; /* blue-500 for button backgrounds in dark */
+	--accent-2:var(--success-text);
+	--danger:var(--error-text);
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
 	margin:0;
-	background:radial-gradient(1000px 600px at 10% -10%, #1a1f3b 0%, transparent 60%),
-		linear-gradient(180deg, #0e1020 0%, #0b0d17 100%);
 	color:var(--text);
 	font:400 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 	background-color:var(--bg);
-}
-:root.light body{
-	background:linear-gradient(180deg, #f9faff 0%, #f2f4fb 100%);
+	transition: background-color .25s ease, color .25s ease;
 }
 .container{width:min(1000px, 92%); margin:32px auto}
 header.container{margin-top:48px; text-align:center}
-.subtitle{color:var(--muted); margin-top:8px}
+.subtitle{color:var(--muted-text); margin-top:8px}
+
+a{color:var(--link)}
 
 .card{
-	background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
 	border:1px solid var(--border);
 	border-radius:16px;
 	padding:24px;
 	box-shadow:0 20px 50px rgba(0,0,0,0.08);
 	background-color:var(--panel);
+	transition: background-color .25s ease, color .25s ease, border-color .25s ease;
 }
 .controls{display:flex; justify-content:center; margin-bottom:16px}
 .button{ 
@@ -50,15 +84,16 @@ header.container{margin-top:48px; text-align:center}
 }
 .button:hover{box-shadow:0 6px 16px rgba(0,0,0,0.25)}
 .button.secondary{background:transparent; color:var(--text); border:1px solid var(--border)}
-.button.secondary:hover{background:rgba(255,255,255,0.06)}
+.button.secondary:hover{background:var(--hover-bg)}
 .button.primary[disabled]{opacity:.5; cursor:not-allowed}
 .button.is-active{background:var(--accent-2); color:#fff}
 .button.secondary.is-active{background:var(--accent); color:#fff; border-color:transparent}
 .button:active{transform:translateY(1px)}
+.button:focus-visible{outline:3px solid var(--border); outline-offset:2px}
 .upload{display:flex; gap:12px}
 
 /* Preview layout fix */
-.preview{position:relative; display:grid; place-items:center; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px}
+.preview{position:relative; display:grid; place-items:center; background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:16px; transition: background-color .25s ease, border-color .25s ease}
 .preview canvas, .preview video{max-width:100%; border-radius:8px; background:#000}
 .preview video{width:100%; height:auto}
 
@@ -66,12 +101,11 @@ header.container{margin-top:48px; text-align:center}
 
 .actions{display:flex; justify-content:center; margin:16px 0}
 
-.result{margin-top:12px; padding:16px; border:1px solid var(--border); border-radius:12px; background:rgba(108,124,255,0.06)}
+.result{margin-top:12px; padding:16px; border:1px solid var(--border); border-radius:12px; background:var(--success-bg)}
 .result strong{color:var(--accent-2)}
-.muted{color:var(--muted)}
+.muted{color:var(--muted-text)}
 
-.badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:#12162a}
-:root.light .badge{background:#f0f2ff}
+.badge{display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; background:var(--hover-bg)}
 .badge .dot{width:10px; height:10px; border-radius:50%}
 
 .manual-grid{display:grid; gap:12px}
@@ -83,6 +117,7 @@ header.container{margin-top:48px; text-align:center}
 .chip{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border:1px solid var(--border); border-radius:999px; cursor:pointer; user-select:none; background:rgba(255,255,255,0.02); transition:.2s box-shadow, .2s background}
 .chip:hover{box-shadow:0 4px 12px rgba(0,0,0,0.25)}
 .chip input{appearance:none; width:14px; height:14px; border:2px solid var(--border); border-radius:50%}
+.chip input:focus-visible{outline:3px solid var(--border); outline-offset:2px}
 .chip input:checked + .swatch + span, .chip input:checked{filter:none}
 .chip .swatch{width:18px; height:12px; border-radius:4px; border:1px solid rgba(0,0,0,0.25)}
 
@@ -101,6 +136,11 @@ header.container{margin-top:48px; text-align:center}
 .swatch-silver{background:#C0C0C0}
 
 .manual-actions{margin-top:8px}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+	*{transition:none !important}
+}
 
 /* Responsive */
 @media (max-width: 640px){
