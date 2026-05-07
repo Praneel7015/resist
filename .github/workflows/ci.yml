@@ -1,0 +1,115 @@
+name: CI/CD Pipeline for Resist Project
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build_and_test:
+    name: Build, Lint, Test, and Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: | 
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install -r requirements.txt
+          # Install tools needed for testing/linting if any (e.g., flake8, pytest)
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v3
+        with:
+          path: .venv
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: | 
+            ${{ runner.os }}-pip-
+
+      - name: Run Linting Checks
+        run: | 
+          # Assuming basic linting setup, can be expanded with flake8/mypy
+          echo "Running basic code quality checks..."
+          # Placeholder for actual linting command if configured
+
+      - name: Run Unit Tests (Placeholder)
+        run: | 
+          echo "Running unit tests..."
+          # Placeholder for pytest command
+          # pytest
+
+      - name: Security Scan (Dependency Check)
+        uses: actions/dependency-review-action@v1
+        with:
+          path: requirements.txt
+
+      - name: Build Docker Image
+        run: | 
+          docker build -t resist:latest .
+
+      - name: Build and Push Docker Image
+        if: github.ref == 'refs/heads/main'
+        run: | 
+          # Note: This assumes AWS credentials are set as secrets for the deploy job, 
+          # but we build/push here for CI verification.
+          docker push resist:latest
+
+  integration_test:
+    name: Integration Tests (Simulated)
+    needs: build_and_test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Environment (Simulated)
+        run: | 
+          echo "Setting up environment variables for integration tests..."
+
+      - name: Run Integration Tests (Placeholder)
+        run: | 
+          echo "Running integration tests against Flask API endpoints..."
+          # Placeholder for actual integration testing setup (e.g., using httpx)
+
+  deploy_to_staging:
+    name: Deploy to Staging Environment
+    needs: build_and_test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: Staging # Use GitHub Environments for secret management
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Build Docker Image
+        run: | 
+          docker build -t resist:latest .
+
+      - name: Tag Image
+        run: | 
+          docker tag resist:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/resist:latest
+
+      - name: Push Image to ECR
+        run: | 
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/resist:latest
+
+      - name: Deploy to AWS Lambda (Staging)
+        run: | 
+          aws lambda update-function-code \\
+            --function-name resist \\
+            --image-uri ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/resist:latest
